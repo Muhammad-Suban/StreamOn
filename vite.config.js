@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
    server:{
     proxy: {
-      '/api': 'https://backend-mega-stream-production.up.railway.app/',
-      // '/api': 'http://localhost:8000',
+      '/api': 'https://backend-mega-stream-production.up.railway.app',
+      '/api': 'http://localhost:8000',
     },
   },
   plugins: [react()],
