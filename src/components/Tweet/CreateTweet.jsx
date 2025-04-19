@@ -14,6 +14,22 @@ function CreateTweet() {
       console.error('Error creating tweet:', error)
     }
   }
+  const [isReady, setIsReady] = useState(false); // set to true when API is done
+
+  if (!isReady) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center text-gray-400">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/7486/7486121.png"
+          alt="coming soon"
+          className="w-24 h-24 mb-4 opacity-70"
+        />
+        <h2 className="text-xl font-semibold text-white">Work In Progress</h2>
+        <p className="text-sm mt-2 text-gray-400">We’re building this section. Stay tuned! 🚧</p>
+      </div>
+    );
+  }
+
 
   return (
     <div className="max-w-2xl mx-auto p-4 bg-neutral-900 rounded-lg">

@@ -17,7 +17,6 @@ function VideoPlayer() {
     const fetchedVideo = async () => {
       try {
         let res = await getVideoById(videoId);
-        console.log("*******");
         setVideo(res.data?.data);
         fetchedOwner(res.data?.data?.ownerName);
 
@@ -31,14 +30,14 @@ function VideoPlayer() {
   }, [videoId]);
 
   const fetchedOwner = async (owner) => {
-    // useEffect(() => {
     try {
-      const res = await axios.get(`/api/v1/users/owner-details`, {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/owner-details`, {
         params: { owner: owner }, //sending owner as querry parameter
       });
       // console.log("owner details", res);
       console.log("Owner fetched successfully");
       setOwner(res.data?.data);
+      
     } catch (error) {
       console.log("Error fetching owner:");
       throw error;

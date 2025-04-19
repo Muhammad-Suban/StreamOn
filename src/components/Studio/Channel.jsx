@@ -2,6 +2,7 @@ import { FiUpload, FiImage, FiSave } from "react-icons/fi";
 import { useState } from "react";
 
 function Channel() {
+  const [isReady, setIsReady] = useState(false); // set to true when API is done
   const [channelData, setChannelData] = useState({
     userName: "",
     description: "",
@@ -16,6 +17,21 @@ function Channel() {
     // Handle channel creation logic here
     console.log("Channel Data:", channelData);
   };
+
+  if (!isReady) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center text-gray-400">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/7486/7486121.png"
+          alt="coming soon"
+          className="w-24 h-24 mb-4 opacity-70"
+        />
+        <h2 className="text-xl font-semibold text-white">Work In Progress</h2>
+        <p className="text-sm mt-2 text-gray-400">We’re building CHENNEL section. Stay tuned! 🚧</p>
+      </div>
+    );
+  }
+
 
   return (
     <>

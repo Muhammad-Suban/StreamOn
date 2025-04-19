@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import { FiUpload, FiImage, FiSave } from "react-icons/fi";
+import { useState } from "react";
+import { FiUpload, FiImage } from "react-icons/fi";
+import { ImSpinner2 } from "react-icons/im";
 import ChannelInfo from "./Channel";
 import axios from "axios";
+// import { publishAVideo } from "../../utils/api";
 
 function Studio() {
   const [videoData, setVideoData] = useState({
@@ -9,8 +11,10 @@ function Studio() {
     description: "",
     videoFile: null,
     thumbnailFile: null,
-    // category: 'gaming'
   });
+
+  const [isLoadingThumbnail, setIsLoadingThumbnail] = useState(false);
+  const [isLoadingVideo, setIsLoadingVideo] = useState(false);
 
   const categories = [
     { id: "gaming", name: "Gaming" },
@@ -21,30 +25,49 @@ function Studio() {
     { id: "sports", name: "Sports" },
   ];
 
+  const handleImageChange = (e, type) => {
+    const file = e.target.files[0];
+    setVideoData({ ...videoData, [type]: file });
+
+    if (file && type === "thumbnailFile") {
+      setIsLoadingThumbnail(true);
+      setTimeout(() => {
+        setIsLoadingThumbnail(false);
+      }, 800);
+    }
+
+    if (file && type === "videoFile") {
+      setIsLoadingVideo(true);
+      setTimeout(() => {
+        setIsLoadingVideo(false);
+      }, 800);
+    }
+  };
+
   const handleVideoSubmit = async (e) => {
     e.preventDefault();
-    // const form = new FormData();
-    // for (const key in formData) {
-    //   form.append(key, formData[key]);
-    // }
-
-    console.log("Video Data:", videoData);
-    try {
-      const res = await axios.post("/api/v1/videos/", videoData,{
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("video uploaded successfully");
-    } catch (error) {
-      console.log("error while uploading the video");
-      throw error;
+    const form = new FormData();
+    for (const key in videoData) {
+      form.append(key, videoData[key]);
     }
+
+     try {
+        await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/videos/`, form, {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        });
+    
+        console.log("video uploded");
+      } catch (error) {
+       
+        throw error;
+      }
   };
 
   return (
     <div className="w-full pl-[5.5rem] py-6">
       <div className="max-w-4xl mx-auto px-4">
         <ChannelInfo />
-        {/* Video Upload Section */}
         <section>
           <h2 className="text-2xl font-bold text-white mb-6">Upload Video</h2>
           <form onSubmit={handleVideoSubmit} className="space-y-6">
@@ -52,30 +75,34 @@ function Studio() {
               {/* Video Upload */}
               <div className="relative">
                 <div className="h-64 bg-neutral-800 rounded-lg flex items-center justify-center border-2 border-dashed border-neutral-700 hover:border-red-500 transition-colors cursor-pointer">
-                  <div className="text-center">
-                    <FiUpload
-                      size={36}
-                      className="mx-auto mb-2 text-neutral-500"
-                    />
-                    <p className="text-neutral-400">
-                      Drag and drop your video or click to browse
-                    </p>
-                    <p className="text-sm text-neutral-500 mt-1">
-                      MP4, WebM or Ogg (Max 2GB)
-                    </p>
-                  </div>
+                  {isLoadingVideo ? (
+                    <ImSpinner2 className="animate-spin text-red-500 text-3xl" />
+                  ) : (
+                    <div className="text-center">
+                      <FiUpload
+                        size={36}
+                        className="mx-auto mb-2 text-neutral-500"
+                      />
+                      <p className="text-neutral-400">
+                        Drag and drop your video or click to browse
+                      </p>
+                      <p className="text-sm text-neutral-500 mt-1">
+                        MP4, WebM or Ogg (Max 2GB)
+                      </p>
+                    </div>
+                  )}
                   <input
                     type="file"
                     accept="video/*"
                     className="absolute inset-0 opacity-0 cursor-pointer"
-                    onChange={(e) =>
-                      setVideoData({
-                        ...videoData,
-                        videoFile: e.target.files[0],
-                      })
-                    }
+                    onChange={(e) => handleImageChange(e, "videoFile")}
                   />
                 </div>
+                {!isLoadingVideo && videoData.videoFile && (
+                  <p className="text-green-400 text-sm mt-2">
+                    ✅ Video loaded! You can now upload the video.
+                  </p>
+                )}
               </div>
 
               {/* Video Details */}
@@ -129,8 +156,6 @@ function Studio() {
                   </label>
                   <select
                     id="videoCategory"
-                    // value={videoData.category}
-                    // onChange={(e) => setVideoData({ ...videoData, category: e.target.value })}
                     className="w-full px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg focus:outline-none focus:border-red-500 text-white"
                   >
                     {categories.map((category) => (
@@ -147,26 +172,30 @@ function Studio() {
                     Thumbnail
                   </label>
                   <div className="relative h-40">
-                    <div className="h-full bg-neutral-800 rounded-lg flex items-center justify-center border-2 border-dashed border-neutral-700 hover:border-red-500 transition-colors cursor-pointer">
-                      <div className="text-center">
-                        <FiImage
-                          size={24}
-                          className="mx-auto mb-2 text-neutral-500"
-                        />
-                        <p className="text-neutral-400">Upload Thumbnail</p>
-                      </div>
+                    <div className="h-full bg-neutral-800 rounded-lg flex items-center justify-center border-2 border-dashed border-neutral-700 hover:border-red-500 transition-colors cursor-pointer overflow-hidden">
+                      {isLoadingThumbnail ? (
+                        <ImSpinner2 className="animate-spin text-red-500 text-2xl" />
+                      ) : (
+                        <div className="text-center">
+                          <FiImage
+                            size={24}
+                            className="mx-auto mb-2 text-neutral-500"
+                          />
+                          <p className="text-neutral-400">Upload Thumbnail</p>
+                        </div>
+                      )}
                       <input
                         type="file"
                         accept="image/*"
                         className="absolute inset-0 opacity-0 cursor-pointer"
-                        onChange={(e) =>
-                          setVideoData({
-                            ...videoData,
-                            thumbnailFile: e.target.files[0],
-                          })
-                        }
+                        onChange={(e) => handleImageChange(e, "thumbnailFile")}
                       />
                     </div>
+                    {!isLoadingThumbnail && videoData.thumbnailFile && (
+                      <p className="text-green-400 text-sm">
+                        ✅ Thumbnail loaded! You can now upload the video.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

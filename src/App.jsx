@@ -33,45 +33,45 @@ function App() {
     })()
   },[])
 
-  const handleLogin = (formData) => {
-    console.log("Login data:", formData);
-    setIsLoggedIn(true);
-    setAuthPage(null);
-  };
+  // const handleLogin = (formData) => {
+  //   console.log("Login data:", formData);
+  //   setIsLoggedIn(true);
+  //   setAuthPage(null);
+  // };
 
-  const handleRegister = (formData) => {
-    console.log("Register data:", formData);
-    setIsLoggedIn(true);
-    setAuthPage(null);
-  };
+  // const handleRegister = (formData) => {
+  //   console.log("Register data:", formData);
+  //   setIsLoggedIn(true);
+  //   setAuthPage(null);
+  // };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setCurrentPage("home");
-  };
+  // const handleLogout = () => {
+  //   setIsLoggedIn(false);
+  //   setCurrentPage("home");
+  // };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
 
   // Show auth pages if not logged in and auth page is selected
-  if (authPage === "login") {
-    return (
-      <Login
-        onLogin={handleLogin}
-        onSwitchToRegister={() => setAuthPage("register")}
-      />
-    );
-  }
+  // if (authPage === "login") {
+  //   return (
+  //     <Login
+  //       onLogin={handleLogin}
+  //       onSwitchToRegister={() => setAuthPage("register")}
+  //     />
+  //   );
+  // }
 
-  if (authPage === "register") {
-    return (
-      <Register
-        onRegister={handleRegister}
-        onSwitchToLogin={() => setAuthPage("login")}
-      />
-    );
-  }
+  // if (authPage === "register") {
+  //   return (
+  //     <Register
+  //       onRegister={handleRegister}
+  //       onSwitchToLogin={() => setAuthPage("login")}
+  //     />
+  //   );
+  // }
 
 
   return (

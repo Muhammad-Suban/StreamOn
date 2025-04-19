@@ -1,14 +1,28 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BACKEND_URL from "../../config";
 import { getAllVideos } from "../../utils/api";
+
+// Helper to convert seconds to H:mm:ss or m:ss
+const formatDuration = (duration) => {
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = Math.floor(duration % 60);
+
+  if (hours > 0) {
+    return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
+
 function VideoGrid() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [videos, setVideos] = useState([]);
-  const [time, setTime] = useState([""]);
-  // const [create, setCreate] = useState(0);
-  const [owner, setOwner] = useState([]);
+  const [time, setTime] = useState([]);
   const navigate = useNavigate();
 
   const categories = [
@@ -25,50 +39,34 @@ function VideoGrid() {
   useEffect(() => {
     (async () => {
       try {
-        let res = await getAllVideos()
-
-        console.log("video", res?.data?.videos);
-        setVideos(res?.data?.videos);
-
-        // fetchOwner(res.data?.data?.videos);
-
+        const res = await getAllVideos();
+        setVideos(res?.data?.videos || []);
         console.log("Videos successfully fetched");
       } catch (error) {
-        console.log("Error in fetching videos");
-        throw error;
+        console.error("Error in fetching videos", error);
       }
     })();
   }, []);
 
-  // const fetchOwner = async (videos) => {
-  //   for (const video of videos) {
-  //     try {
-
-  //       const res = await axios.post("/api/v1/users/owner-details", {
-  //         owner: video.ownerName,
-  //       });
-  //       console.log("check res",res)
-
-  //     } catch (error) {
-  //       console.error("Error in fetching owner", error);
-  //     }
-  //   }
-  // };
-
   const calculatePublishTime = (createdAt) => {
-    let diff = Date.now() - new Date(createdAt);
-    const hours = diff / (1000 * 60 * 60);
-    const days = diff / (1000 * 60 * 60 * 24);
-    const months = diff / (1000 * 60 * 60 * 24 * 30);
-
-    if (hours < 24) return Math.floor(hours) + " hours ago";
-    if (days < 30) return Math.floor(days) + " days ago";
-    return Math.floor(months) + " months ago";
+    const diff = Date.now() - new Date(createdAt);
+    const seconds = diff / 1000;
+    const minutes = seconds / 60;
+    const hours = minutes / 60;
+    const days = hours / 24;
+    const months = days / 30;
+  
+    if (seconds < 60) return `${Math.floor(seconds)} sec ago`;
+    if (minutes < 60) return `${Math.floor(minutes)} min ago`;
+    if (hours < 24) return `${Math.floor(hours)} hours ago`;
+    if (days < 30) return `${Math.floor(days)} days ago`;
+    return `${Math.floor(months)} months ago`;
   };
+  
 
   useEffect(() => {
     const times = videos.map((video) => calculatePublishTime(video.createdAt));
-    setTime(times); // Store the formatted times in the state
+    setTime(times);
   }, [videos]);
 
   return (
@@ -106,7 +104,11 @@ function VideoGrid() {
               className="w-full aspect-video object-cover"
             />
             <div className="text-sm text-gray-400 flex flex-wrap">
-              <span className="ml-auto p-1">{video.duration?.toFixed(2) }</span>
+              <span className="ml-auto p-1">
+                {video.duration != null
+                  ? formatDuration(video.duration)
+                  : "--:--"}
+              </span>
             </div>
             <div className="p-2">
               <h3 className="font-medium line-clamp-2 text-white hover:text-red-500">
@@ -117,14 +119,10 @@ function VideoGrid() {
               </p>
 
               <div className="text-sm text-gray-400 flex flex-wrap gap-2">
-
-                {/* Wrapper for the last two spans */}
                 <div className="w-full flex flex-wrap gap-2">
                   <span className="block">{video.views} views</span>
-                  <span className="block">•{time[index]}</span>
+                  <span className="block">• {time[index]}</span>
                 </div>
-
-                {/* Duration fixed to the right */}
               </div>
             </div>
           </div>

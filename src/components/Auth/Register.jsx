@@ -50,12 +50,12 @@ function Register({ onRegister }) {
     }
 
     try {
-      await axios.post('/api/v1/users/register', form, {
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/register`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("Registration successful!");
-      // onRegister("LoggedIn");
-      // navigate("/");
+      onRegister("LoggedIn");
+      navigate("/");
     } catch (error) {
       console.error("Error registering user:", error);
     }
@@ -102,7 +102,6 @@ function Register({ onRegister }) {
                     onChange={(e) => handleImageChange(e, "coverImage")}
                     id="coverImage"
                     name="coverImage"
-                    // onChange={handleImageChange}
                     type="file"
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
@@ -140,7 +139,6 @@ function Register({ onRegister }) {
                     type="file"
                     id="avator"
                     name="avator"
-                    // onChange={handleImageChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                 </div>

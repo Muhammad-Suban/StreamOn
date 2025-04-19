@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   status: JSON.parse(localStorage.getItem("status")) || false,
   userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
+  
 };
 const authSlice = createSlice({
   name: "auth",
@@ -16,7 +17,6 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       (state.status = false), (state.userInfo = null);
-
       localStorage.removeItem("status");
       localStorage.removeItem("userInfo");
     },

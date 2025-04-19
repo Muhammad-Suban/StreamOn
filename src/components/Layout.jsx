@@ -14,7 +14,7 @@ function Layout({ isLoggedIn, setIsLoggedIn }) {
 
   return (
     <div className="h-screen flex flex-col bg-black">
-      {/* Header */}
+      {/* Header */}  
       <header className="fixed top-0 left-0 right-0 h-14 bg-black flex items-center justify-between px-4 z-50 border-b border-neutral-900">
         <div className="flex items-center gap-4">
           <button 
