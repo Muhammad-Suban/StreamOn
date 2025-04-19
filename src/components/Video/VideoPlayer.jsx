@@ -129,7 +129,7 @@ function VideoPlayer() {
                   <LikeButton
                     entityId={videoId}
                     entityType="video"
-                    initialLikes={1200}
+                    initialLikes={10000 }
                   />
                   <button className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white rounded-full hover:bg-neutral-800">
                     <FiShare2 size={20} />

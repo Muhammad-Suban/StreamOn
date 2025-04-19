@@ -20,8 +20,9 @@ function Login({ onLogin, onSwitchToRegister }) {
     console.log("CHECK FORM-DATA", formData);
 
     try {
-      let response = await axios.post(`/api/v1/users/login`, formData, {
+      let response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/login`, formData, {
         headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       });
 
       console.log("successfully login ::", response);

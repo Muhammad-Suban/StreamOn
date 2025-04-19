@@ -1,11 +1,9 @@
 import { useState,useEffect } from "react";
 import { FiMenu, FiSearch, FiVideo, FiBell, FiLogOut } from "react-icons/fi";
 import Sidebar from "./components/Sidebar";
-// import VideoGrid from "./components/VideoGrid";
 import { Login, Logout, Register } from "./components/Auth/index";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import BACKEND_URL from "./config"; 
 import axios from "axios";
 
 function App() {
@@ -19,21 +17,20 @@ function App() {
 
 
   useEffect(()=>{
-    const fetchedUser = async()=>{
+    (async()=>{
 
       try {
-         const res = await axios.get(`${BACKEND_URL}/api/v1/users/current-user`,{
+         const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/current-user`,{
           withCredentials: true,
          }) 
         setCurrentUser(res?.data?.data)
-        console.log(currentUser)
+        console.log("current user:: ",res?.data?.data)
         console.log("sucessfully fetched currenct user")
       } catch (error) {
-        console.log("failed to fetched the current user")
+        console.log("failed to fetched the current user",error)
         throw error
       }
-    }
-    fetchedUser() 
+    })()
   },[])
 
   const handleLogin = (formData) => {

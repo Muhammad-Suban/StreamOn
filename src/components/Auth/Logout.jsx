@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import BACKEND_URL from "../../config";
 
 function Logout() {
   const navigate = useNavigate();
@@ -12,8 +11,14 @@ function Logout() {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/v1/users/logout`);
-      console.log(res)
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("sucssfullu logout", res);
       dispatch(userLoggedOut());
       navigate("/");
     } catch (error) {

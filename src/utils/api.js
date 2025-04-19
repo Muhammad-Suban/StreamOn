@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getAllVideos = async () => {
   try {
-    const res = await axios.get(`/api/v1/videos/`, {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/videos/`, {
       withCredentials: true,
     });
     return res?.data;
@@ -13,7 +13,7 @@ export const getAllVideos = async () => {
 
 export const getVideoById = async(videoId)=>{
     try {
-        let res = await axios.get(`/api/v1/videos/${videoId}`, {
+        let res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/videos/${videoId}`, {
             timeout: 10000,
           });
           console.log(res.data.data);

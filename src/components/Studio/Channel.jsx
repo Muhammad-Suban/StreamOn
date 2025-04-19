@@ -7,7 +7,7 @@ function Channel() {
     description: "",
     coverImage: null,
     avator: null,
-    description:null,
+    // description:null,
     
   });
 
