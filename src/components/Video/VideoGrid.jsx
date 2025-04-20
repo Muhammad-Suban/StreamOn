@@ -55,14 +55,13 @@ function VideoGrid() {
     const hours = minutes / 60;
     const days = hours / 24;
     const months = days / 30;
-  
+
     if (seconds < 60) return `${Math.floor(seconds)} sec ago`;
     if (minutes < 60) return `${Math.floor(minutes)} min ago`;
     if (hours < 24) return `${Math.floor(hours)} hours ago`;
     if (days < 30) return `${Math.floor(days)} days ago`;
     return `${Math.floor(months)} months ago`;
   };
-  
 
   useEffect(() => {
     const times = videos.map((video) => calculatePublishTime(video.createdAt));
@@ -111,14 +110,23 @@ function VideoGrid() {
               </span>
             </div>
             <div className="p-2">
-              <h3 className="font-medium line-clamp-2 text-white hover:text-red-500">
+              <h3 className=" font-medium  text-white hover:text-red-500">
                 {video.title}
               </h3>
-              <p className="text-sm text-gray-400 mt-1 hover:text-red-500">
-                {video.channel} channel name
-              </p>
+              <div className="flex items-center gap-4 my-1">
+                <img
+                  src={video.ownerName.avator}
+                  alt={video.ownerName.userName}
+                  className="w-7 h-7 rounded-full"
+                />
+                <div>
+                  <h3 className=" text-white font-medium mt-1 hover:text-red-500">
+                    {video.ownerName.userName}
+                  </h3>
+                </div>
+              </div>
 
-              <div className="text-sm text-gray-400 flex flex-wrap gap-2">
+              <div className="p-1 text-sm text-gray-400 flex flex-wrap gap-2">
                 <div className="w-full flex flex-wrap gap-2">
                   <span className="block">{video.views} views</span>
                   <span className="block">• {time[index]}</span>
