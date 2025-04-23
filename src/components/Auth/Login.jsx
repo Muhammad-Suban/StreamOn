@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login  as userLoggedIn} from "../../../store/authSlice";
-import BACKEND_URL from "../../config";
 
 function Login({ onLogin, onSwitchToRegister }) {
   const navigate = useNavigate();
@@ -24,6 +23,10 @@ function Login({ onLogin, onSwitchToRegister }) {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+      // let response = await axios.post(`/api/v1/users/login`, formData, {
+      //   headers: { "Content-Type": "application/json" },
+      //   withCredentials: true,
+      // });
 
       console.log("successfully login ::", response);
       dispatch(userLoggedIn(formData))

@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiUser, FiImage } from "react-icons/fi";
 import axios from "axios";
-import BACKEND_URL from "../../config";
-
-function Register({ onRegister }) {
-  const navigate = useNavigate()
+import { useDispatch } from "react-redux";
+import { login } from "../../../store/authSlice";
+function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     userName: "",
@@ -23,6 +23,7 @@ function Register({ onRegister }) {
 
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
+  const dispatch = useDispatch()
 
   const handleImageChange = (e, type) => {
     const { name } = e.target;
@@ -48,16 +49,27 @@ function Register({ onRegister }) {
     for (const key in formData) {
       form.append(key, formData[key]);
     }
-
+    
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/register`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/register`,
+        // `/api/v1/users/register`,
+        form,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      console.log("Register data 1", response.data);
+      console.log("Register data 2", response?.data?.message);
+      console.log("Register data 3", response?.data?.message.userName);
+      console.log("Register data 4", response.data?.data);
+      console.log("Register data 5", response.data?.data?.message);
+      dispatch(login(response?.data?.message))
       alert("Registration successful!");
-      onRegister("LoggedIn");
       navigate("/");
     } catch (error) {
       console.error("Error registering user:", error);
+      alert("Registration failed. Please try again.");
     }
   };
 
@@ -253,7 +265,7 @@ function Register({ onRegister }) {
           <div>
             <button
               type="submit"
-              onClick={()=>navigate("/")}
+              // onClick={() => navigate("/")}
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none"
             >
               Create Account

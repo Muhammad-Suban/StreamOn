@@ -13,12 +13,13 @@ function Logout() {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/logout`,
+        // `/api/v1/users/logout`,
         {},
         {
           withCredentials: true,
         }
       );
-      console.log("sucssfullu logout", res);
+      console.log("sucssfully logout", res);
       dispatch(userLoggedOut());
       navigate("/");
     } catch (error) {

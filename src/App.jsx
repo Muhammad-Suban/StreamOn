@@ -7,71 +7,72 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 function App() {
-  const user = useSelector((state) => state.auth.status);
+  const user = useSelector((state) => state.auth.userInfo);
+
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentPage, setCurrentPage] = useState("home");
-  const [authPage, setAuthPage] = useState(null); // 'login' or 'register'
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [currentPage, setCurrentPage] = useState("home");
+  // const [authPage, setAuthPage] = useState(null); // 'login' or 'register'
   const [currentUser,setCurrentUser]= useState([])
 
 
-  useEffect(()=>{
-    (async()=>{
+  // useEffect(()=>{
+  //   (async()=>{
 
-      try {
-         const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/current-user`,{
-          withCredentials: true,
-         }) 
-        setCurrentUser(res?.data?.data)
-        console.log("current user:: ",res?.data?.data)
-        console.log("sucessfully fetched currenct user")
-      } catch (error) {
-        console.log("failed to fetched the current user",error)
-        throw error
-      }
-    })()
-  },[])
+  //     try {
+  //        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/current-user`,{
+  //         withCredentials: true,
+  //        }) 
+  //       setCurrentUser(res?.data?.data)
+  //       console.log("current user:: ",res?.data?.data)
+  //       console.log("sucessfully fetched currenct user")
+  //     } catch (error) {
+  //       console.log("failed to fetched the current user",error)
+  //       throw error
+  //     }
+  //   })()
+  // },[])
 
-  const handleLogin = (formData) => {
-    console.log("Login data:", formData);
-    setIsLoggedIn(true);
-    setAuthPage(null);
-  };
+  // const handleLogin = (formData) => {
+  //   console.log("Login data:", formData);
+  //   setIsLoggedIn(true);
+  //   setAuthPage(null);
+  // };
 
-  const handleRegister = (formData) => {
-    console.log("Register data:", formData);
-    setIsLoggedIn(true);
-    setAuthPage(null);
-  };
+  // const handleRegister = (formData) => {
+  //   console.log("Register data:", formData);
+  //   setIsLoggedIn(true);
+  //   setAuthPage(null);
+  // };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setCurrentPage("home");
-  };
+  // const handleLogout = () => {
+  //   setIsLoggedIn(false);
+  //   setCurrentPage("home");
+  // };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
 
   // Show auth pages if not logged in and auth page is selected
-  if (authPage === "login") {
-    return (
-      <Login
-        onLogin={handleLogin}
-        onSwitchToRegister={() => setAuthPage("register")}
-      />
-    );
-  }
+  // if (authPage === "login") {
+  //   return (
+  //     <Login
+  //       onLogin={handleLogin}
+  //       onSwitchToRegister={() => setAuthPage("register")}
+  //     />
+  //   );
+  // }
 
-  if (authPage === "register") {
-    return (
-      <Register
-        onRegister={handleRegister}
-        onSwitchToLogin={() => setAuthPage("login")}
-      />
-    );
-  }
+  // if (authPage === "register") {
+  //   return (
+  //     <Register
+  //       onRegister={handleRegister}
+  //       onSwitchToLogin={() => setAuthPage("login")}
+  //     />
+  //   );
+  // }
 
 
   return (
@@ -129,7 +130,8 @@ function App() {
                 onClick={() => navigate("/profile")}
               >
                 <img
-                  src={currentUser?.avator}
+                  // src={currentUser?.avator}
+                  src={user?.avator}
                   alt="Profile"
                   className="w-8 h-8 rounded-full"
                 />
